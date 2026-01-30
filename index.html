@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blokhutwinkel - Europa's Grootste Showroom</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.39/build/spline-viewer.js"></script>
+</head>
+<body>
+    <div class="spline-background">
+        <spline-viewer url="https://prod.spline.design/ZWoEQBwlGHc5aQqX/scene.splinecode"></spline-viewer>
+    </div>
+    <div class="ambient-bg"></div>
+    <div class="fire-overlay"></div>
+
+    <header class="header-bar">
+        <div class="header-logo">Blokhutwinkel.nl</div>
+        <div class="header-tagline">Europa's Grootste Showroom</div>
+    </header>
+
+    <div class="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+    </div>
+
+    <div class="pause-indicator" id="pause-indicator">Gepauzeerd</div>
+
+    <div id="error-message" class="error-message hidden">
+        <h1>Fout bij laden</h1>
+        <p>Kon de slides niet laden. Controleer de verbinding.</p>
+    </div>
+
+    <div id="slideshow-container" class="slideshow-container">
+        <!-- Slides will be dynamically inserted here -->
+    </div>
+
+    <div class="slide-indicators" id="slide-indicators">
+        <!-- Indicators will be dynamically inserted here -->
+    </div>
+
+    <!-- News Ticker -->
+    <div class="news-ticker" id="news-ticker">
+        <div class="news-ticker-label">
+            <span class="news-label-text">NIEUWS</span>
+            <span class="news-label-region">GELDERLAND</span>
+        </div>
+        <div class="news-ticker-content">
+            <div class="news-ticker-scroll" id="news-ticker-scroll">
+                <!-- News items will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/app.js"></script>
+</body>
+</html>

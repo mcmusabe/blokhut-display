@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  blokhut-display:
+    build: .
+    container_name: blokhut-display
+    ports:
+      - "80:80"
+    volumes:
+      # Live updates: wijzig bestanden op PC, direct zichtbaar op alle TV's
+      - ./assets:/usr/share/nginx/html/assets:ro
+      - ./index.html:/usr/share/nginx/html/index.html:ro
+    restart: unless-stopped

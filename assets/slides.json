@@ -1,0 +1,157 @@
+[
+    {
+        "id": "welcome",
+        "type": "welcome",
+        "title": "Welkom bij Blokhutwinkel",
+        "divider": true,
+        "subtitle": "Europa's grootste showroom voor blokhutten en tuinhuizen",
+        "stats": [
+            { "number": "100+", "label": "Showmodellen" },
+            { "number": "10.000+", "label": "Modellen Online" },
+            { "number": "25+", "label": "Jaar Ervaring" }
+        ]
+    },
+    {
+        "id": "video-tuinhuis",
+        "type": "video",
+        "badge": "Video",
+        "title": "Douglas Tuinhuis met Carport",
+        "subtitle": "Industrial look met glas en berging - Geproduceerd in Lochem",
+        "video": "assets/videos/Douglas tuinhuis met carport, overkapping, industrial look glas en berging. Geproduceerd in Lochem..mp4"
+    },
+    {
+        "id": "product-blokhut-1",
+        "type": "product",
+        "badge": "Populair",
+        "title": "Blokhut 28mm",
+        "subtitle": "300x676 - Ruime blokhut met extra diepte",
+        "image": "assets/images/_18_sm283830r30101_300x676-28mm.png",
+        "price": "Vanaf €2.495,-",
+        "priceNote": "Gratis levering in NL & BE"
+    },
+    {
+        "id": "product-blokhut-2",
+        "type": "product",
+        "badge": "Compact",
+        "title": "Blokhut 28mm",
+        "subtitle": "250x626 - Ideaal voor kleinere tuinen",
+        "image": "assets/images/_5_sm282525r40102_250x626-28mm_b.png",
+        "price": "Vanaf €1.995,-",
+        "priceNote": "Diverse opties beschikbaar"
+    },
+    {
+        "id": "product-wigwam",
+        "type": "product",
+        "badge": "Uniek",
+        "title": "Wigwam 3x4",
+        "subtitle": "Bijzonder design voor uw tuin",
+        "image": "assets/images/wigwam_3_x_4_-_render_1.png",
+        "price": "Vanaf €3.495,-",
+        "priceNote": "Op maat gemaakt"
+    },
+    {
+        "id": "product-garage",
+        "type": "product",
+        "badge": "Bestseller",
+        "title": "Garage",
+        "subtitle": "Ruime garages met of zonder carport",
+        "image": "assets/images/g4434.png",
+        "price": "Vanaf €3.995,-",
+        "priceNote": "Plat dak of zadeldak"
+    },
+    {
+        "id": "video-montage",
+        "type": "video",
+        "badge": "Handleiding",
+        "title": "Montage Blokhut",
+        "subtitle": "Bekijk hoe eenvoudig de montage is",
+        "video": "assets/videos/montagehandleiding blokhut tuindeco.mp4"
+    },
+    {
+        "id": "product-tuinkantoor",
+        "type": "product",
+        "badge": "Trending",
+        "title": "Tuinkantoren",
+        "subtitle": "Thuiswerken in uw eigen tuin",
+        "image": "assets/images/tuinkantoor.webp",
+        "price": "Vanaf €4.995,-",
+        "priceNote": "Isolatie & elektra mogelijk"
+    },
+    {
+        "id": "product-veranda",
+        "type": "product",
+        "badge": "Nieuw",
+        "title": "Veranda's",
+        "subtitle": "Geniet het hele jaar van uw tuin",
+        "image": "assets/images/veranda.webp",
+        "price": "Vanaf €2.495,-",
+        "priceNote": "Op maat gemaakt"
+    },
+    {
+        "id": "product-prieel",
+        "type": "product",
+        "badge": "Exclusief",
+        "title": "Priëlen & Paviljoens",
+        "subtitle": "Sfeervolle buitenverblijven",
+        "image": "assets/images/prieel.webp",
+        "price": "Vanaf €2.995,-",
+        "priceNote": "Met piramidedak"
+    },
+    {
+        "id": "services",
+        "title": "Onze Voordelen",
+        "features": [
+            {
+                "icon": "🚚",
+                "title": "Gratis Levering",
+                "description": "In NL & België"
+            },
+            {
+                "icon": "💳",
+                "title": "Geen Aanbetaling",
+                "description": "Betaal bij levering"
+            },
+            {
+                "icon": "🛠️",
+                "title": "Montage Service",
+                "description": "Professionele plaatsing"
+            },
+            {
+                "icon": "✓",
+                "title": "25+ Jaar Ervaring",
+                "description": "Specialist in maatwerk"
+            }
+        ]
+    },
+    {
+        "id": "contact",
+        "title": "Bezoek Ons",
+        "info": [
+            {
+                "label": "Adres",
+                "value": "Zonnehorst 11, Zutphen"
+            },
+            {
+                "label": "Postcode",
+                "value": "7207 BT"
+            },
+            {
+                "label": "Ma, Wo-Vr",
+                "value": "09:00 - 17:00"
+            },
+            {
+                "label": "Zaterdag",
+                "value": "10:00 - 17:00"
+            }
+        ],
+        "phone": "0575-200200"
+    },
+    {
+        "id": "online",
+        "title": "Bekijk Alles Online",
+        "url": "www.blokhutwinkel.nl",
+        "subtitle": "Meer dan 10.000 modellen online beschikbaar",
+        "qr": true,
+        "cta": "Scan voor onze complete collectie"
+    }
+]
