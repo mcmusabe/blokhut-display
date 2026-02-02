@@ -30,7 +30,7 @@ echo ""
 # Update en installeer packages
 echo "[1/5] Systeem updaten en packages installeren..."
 apt-get update -qq
-apt-get install -y chromium-browser unclutter xdotool
+apt-get install -y chromium unclutter xdotool || apt-get install -y chromium-browser unclutter xdotool
 
 # Disable screen blanking
 echo "[2/5] Scherm altijd aan houden..."
@@ -58,8 +58,9 @@ unclutter -idle 0.5 -root &
 sed -i 's/"exited_cleanly":false/"exited_cleanly":true/' ${HOME_DIR}/.config/chromium/Default/Preferences 2>/dev/null
 sed -i 's/"exit_type":"Crashed"/"exit_type":"Normal"/' ${HOME_DIR}/.config/chromium/Default/Preferences 2>/dev/null
 
-# Start Chromium in kiosk mode
-chromium-browser \\
+# Start Chromium in kiosk mode (chromium of chromium-browser)
+BROWSER=\$(which chromium || which chromium-browser)
+\$BROWSER \\
     --kiosk \\
     --noerrdialogs \\
     --disable-infobars \\
