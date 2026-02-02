@@ -5,14 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blokhutwinkel - Europa's Grootste Showroom</title>
     <link rel="stylesheet" href="assets/style.css">
-    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.39/build/spline-viewer.js"></script>
+    <!-- Spline uitgeschakeld voor performance -->
+    <!-- <script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.39/build/spline-viewer.js"></script> -->
 </head>
 <body>
-    <div class="spline-background">
+    <!-- Spline 3D uitgeschakeld voor betere performance op Raspberry Pi -->
+    <!-- <div class="spline-background">
         <spline-viewer url="https://prod.spline.design/ZWoEQBwlGHc5aQqX/scene.splinecode"></spline-viewer>
-    </div>
+    </div> -->
     <div class="ambient-bg"></div>
-    <div class="fire-overlay"></div>
+    <!-- Fire overlay uitgeschakeld voor betere performance -->
+    <!-- <div class="fire-overlay"></div> -->
 
     <header class="header-bar">
         <div class="header-logo">Blokhutwinkel.nl</div>

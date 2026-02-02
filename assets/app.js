@@ -2,8 +2,8 @@
     'use strict';
 
     const SLIDE_INTERVAL = 10000;
-    const PROGRESS_UPDATE_INTERVAL = 50;
-    const CONTENT_REFRESH_INTERVAL = 30 * 1000; // Elke 30 seconden content herladen (lokale server is snel)
+    const PROGRESS_UPDATE_INTERVAL = 100; // Verhoogd van 50ms naar 100ms voor betere performance
+    const CONTENT_REFRESH_INTERVAL = 5 * 60 * 1000; // Elke 5 minuten content herladen (was 30 sec, onnodig frequent)
 
     // GitHub configuratie - WIJZIG DIT NAAR JE EIGEN REPO
     const GITHUB_USER = 'mcmusabe';
@@ -64,8 +64,9 @@
     async function refreshContent() {
         try {
             const newSlides = await loadSlides();
-            // Alleen updaten als er wijzigingen zijn
-            if (JSON.stringify(newSlides) !== JSON.stringify(slides)) {
+            // Simpele length check eerst (sneller dan JSON.stringify)
+            if (newSlides.length !== slides.length || 
+                newSlides.some((s, i) => s.title !== slides[i]?.title)) {
                 slides = newSlides;
                 const savedSlide = currentSlide;
                 renderSlides();
