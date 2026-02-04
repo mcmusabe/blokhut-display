@@ -17,6 +17,8 @@
     --dark: #1a1a1a;
     --gray: #6b7280;
     --light-gray: #e5e7eb;
+    /* TV safe zone: 5% van rand (digital signage standaard, voorkomt overscan) */
+    --safe-area: 5%;
 }
 
 body {
@@ -110,31 +112,31 @@ body {
 }
 */
 
-/* Header Bar */
+/* Header Bar - safe zone padding voor grote TV */
 .header-bar {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 80px;
+    height: clamp(60px, 8vh, 80px);
     background: var(--primary);
     z-index: 100;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 60px;
+    padding: 0 var(--safe-area);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
 .header-logo {
-    font-size: 2rem;
+    font-size: clamp(1.25rem, 2.5vw, 2.25rem);
     font-weight: 700;
     color: var(--white);
     letter-spacing: 1px;
 }
 
 .header-tagline {
-    font-size: 1.1rem;
+    font-size: clamp(0.9rem, 1.4vw, 1.2rem);
     color: var(--accent);
     font-weight: 500;
     letter-spacing: 2px;
@@ -144,7 +146,7 @@ body {
 /* Progress Bar */
 .progress-container {
     position: fixed;
-    top: 80px;
+    top: clamp(60px, 8vh, 80px);
     left: 0;
     width: 100%;
     height: 4px;
@@ -241,27 +243,29 @@ body {
     color: var(--gray);
 }
 
-/* Slideshow Container */
+/* Slideshow Container - safe zone voor TV */
 .slideshow-container {
     width: 100%;
     height: 100%;
     position: relative;
     z-index: 2;
-    padding-top: 84px;
+    padding-top: clamp(70px, 9vh, 90px);
+    padding-left: var(--safe-area);
+    padding-right: var(--safe-area);
 }
 
-/* Individual Slide - geen animatie voor Pi Zero 2 W */
+/* Individual Slide - geen animatie voor Pi Zero 2 W, safe zone */
 .slide {
     position: absolute;
-    top: 84px;
+    top: clamp(70px, 9vh, 90px);
     left: 0;
     width: 100%;
-    height: calc(100% - 84px);
+    height: calc(100% - clamp(70px, 9vh, 90px));
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 4rem 6rem 6rem;
+    padding: 3rem 1rem 6rem;
     opacity: 0;
     pointer-events: none;
     background: transparent;
@@ -294,9 +298,9 @@ body {
     margin-bottom: 2rem;
 }
 
-/* Typography */
+/* Typography - viewport-schaal voor leesbaarheid op grote TV (digital signage) */
 .slide h1 {
-    font-size: 4.5rem;
+    font-size: clamp(2.25rem, 4vw, 4.5rem);
     font-weight: 700;
     margin-bottom: 1rem;
     text-align: center;
@@ -305,7 +309,7 @@ body {
 }
 
 .slide h2 {
-    font-size: 3rem;
+    font-size: clamp(1.75rem, 3vw, 3rem);
     font-weight: 600;
     margin-bottom: 1rem;
     text-align: center;
@@ -314,7 +318,7 @@ body {
 }
 
 .slide .subtitle {
-    font-size: 1.8rem;
+    font-size: clamp(1.1rem, 1.8vw, 1.8rem);
     color: var(--gray);
     margin-bottom: 2.5rem;
     text-align: center;
@@ -329,7 +333,7 @@ body {
 }
 
 .slide .price {
-    font-size: 3.5rem;
+    font-size: clamp(2rem, 3.2vw, 3.5rem);
     font-weight: 700;
     color: var(--primary);
     margin-top: 1.5rem;
@@ -685,7 +689,7 @@ body {
 
 .slide.product-slide h1 {
     text-align: left;
-    font-size: 4rem;
+    font-size: clamp(2rem, 3.5vw, 4rem);
 }
 
 .slide.product-slide .subtitle {
@@ -694,7 +698,7 @@ body {
 
 .slide.product-slide .price {
     text-align: left;
-    font-size: 3rem;
+    font-size: clamp(1.75rem, 2.8vw, 3rem);
 }
 
 .slide.product-slide .price-note {
@@ -742,13 +746,13 @@ body {
     opacity: 0.2;
 }
 
-/* News Ticker */
+/* News Ticker - hoogte en tekst schaal voor grote TV */
 .news-ticker {
     position: fixed;
-    bottom: 80px;
+    bottom: 0;
     left: 0;
     width: 100%;
-    height: 60px;
+    height: clamp(50px, 7vh, 70px);
     background: linear-gradient(90deg, #c41e3a 0%, #a01830 100%);
     z-index: 150;
     display: flex;
@@ -758,25 +762,25 @@ body {
 
 .news-ticker-label {
     background: #8b0000;
-    padding: 0 25px;
+    padding: 0 var(--safe-area);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-width: 140px;
+    min-width: clamp(120px, 12vw, 160px);
     border-right: 3px solid rgba(255, 255, 255, 0.2);
 }
 
 .news-label-text {
     color: white;
-    font-size: 1.1rem;
+    font-size: clamp(0.9rem, 1.2vw, 1.15rem);
     font-weight: 700;
     letter-spacing: 3px;
 }
 
 .news-label-region {
     color: rgba(255, 255, 255, 0.8);
-    font-size: 0.8rem;
+    font-size: clamp(0.7rem, 1vw, 0.85rem);
     font-weight: 500;
     letter-spacing: 2px;
     margin-top: 2px;
@@ -788,40 +792,67 @@ body {
     display: flex;
     align-items: center;
     position: relative;
-    padding: 0 20px;
+    padding: 0 var(--safe-area);
 }
 
-/* Geen scroll-animatie: één item zichtbaar, wisselt via JS (Pi Zero vriendelijk) */
+/* News ticker scroll-animatie: GPU (translate3d), naadloze loop met dubbele content */
 .news-ticker-scroll {
     display: flex;
     align-items: center;
-    width: 100%;
-    color: white;
-    font-size: 1.3rem;
-    font-weight: 500;
+    white-space: nowrap;
+    animation: tickerScroll 60s linear infinite;
+    will-change: transform;
+    padding-left: 100%;
+}
+
+.news-ticker-scroll:hover {
+    animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .news-ticker-scroll {
+        animation: none;
+    }
+}
+
+@keyframes tickerScroll {
+    0%   { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-100%, 0, 0); }
 }
 
 .news-item {
     display: inline-flex;
     align-items: center;
-    padding: 0 20px;
+    padding: 0 40px;
     color: white;
-    font-size: 1.3rem;
+    font-size: clamp(1rem, 1.4vw, 1.35rem);
     font-weight: 500;
+    flex-shrink: 0;
+}
+
+.news-item::after {
+    content: '•';
+    margin-left: 40px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1.2rem;
+}
+
+.news-item:last-child::after {
+    content: '';
 }
 
 .news-time {
     background: rgba(255, 255, 255, 0.2);
     padding: 4px 12px;
     border-radius: 4px;
-    font-size: 0.9rem;
+    font-size: clamp(0.8rem, 1vw, 0.95rem);
     margin-right: 15px;
     font-weight: 600;
 }
 
-/* Adjust slide indicators position when ticker is visible */
+/* Slide indicators - boven news ticker */
 .slide-indicators {
-    bottom: 155px;
+    bottom: clamp(100px, 14vh, 150px);
 }
 
 /* Stats Row */

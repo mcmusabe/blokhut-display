@@ -361,12 +361,8 @@
         });
     }
 
-    // News Ticker - geen scroll-animatie, wissel elke 6 sec (Pi Zero vriendelijk)
+    // News Ticker - scroll-animatie met dubbele content voor naadloze loop (GPU: translate3d)
     const NEWS_REFRESH_INTERVAL = 5 * 60 * 1000;
-    const NEWS_CYCLE_INTERVAL = 3500; // 3,5 seconden per item
-    let newsItems = [];
-    let newsIndex = 0;
-    let newsCycleTimer = null;
 
     async function loadNews() {
         const tickerScroll = document.getElementById('news-ticker-scroll');
@@ -387,7 +383,7 @@
                     const time = date.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
                     return { time: time, text: item.title };
                 });
-                renderNewsCycle();
+                renderNewsTicker(newsItems);
                 console.log('Live nieuws geladen van Omroep Gelderland');
             } else {
                 throw new Error('No news items');
@@ -398,7 +394,7 @@
                 const localResponse = await fetch('assets/news.json');
                 if (localResponse.ok) {
                     newsItems = await localResponse.json();
-                    renderNewsCycle();
+                    renderNewsTicker(newsItems);
                 } else {
                     throw new Error('Local news not found');
                 }
@@ -409,32 +405,28 @@
                     { time: "09:30", text: "Gratis advies en 3D tekening bij elke offerte" },
                     { time: "09:45", text: "Geen aanbetaling nodig - betaal pas bij levering" }
                 ];
-                renderNewsCycle();
+                renderNewsTicker(newsItems);
             }
         }
 
         setTimeout(loadNews, NEWS_REFRESH_INTERVAL);
     }
 
-    function renderNewsCycle() {
+    function renderNewsTicker(items) {
         const tickerScroll = document.getElementById('news-ticker-scroll');
-        if (!tickerScroll || !newsItems.length) return;
+        if (!tickerScroll || !items.length) return;
 
-        if (newsCycleTimer) clearInterval(newsCycleTimer);
+        const duplicated = [...items, ...items];
+        tickerScroll.innerHTML = duplicated.map(item => `
+            <div class="news-item">
+                ${item.time ? `<span class="news-time">${item.time}</span>` : ''}
+                <span class="news-text">${item.text}</span>
+            </div>
+        `).join('');
 
-        function showItem() {
-            const item = newsItems[newsIndex];
-            tickerScroll.innerHTML = `
-                <div class="news-item">
-                    ${item.time ? `<span class="news-time">${item.time}</span>` : ''}
-                    <span class="news-text">${item.text}</span>
-                </div>
-            `;
-            newsIndex = (newsIndex + 1) % newsItems.length;
-        }
-
-        showItem();
-        newsCycleTimer = setInterval(showItem, NEWS_CYCLE_INTERVAL);
+        const contentWidth = tickerScroll.scrollWidth / 2;
+        const duration = Math.max(40, Math.min(90, contentWidth / 35));
+        tickerScroll.style.animationDuration = `${duration}s`;
     }
 
     if (document.readyState === 'loading') {
