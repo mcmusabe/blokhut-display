@@ -5,7 +5,7 @@ services:
     build: .
     container_name: blokhut-display
     ports:
-      - "80:80"
+      - "8000:80"
     volumes:
       # Live updates: wijzig bestanden op PC, direct zichtbaar op alle TV's
       - ./assets:/usr/share/nginx/html/assets:ro
