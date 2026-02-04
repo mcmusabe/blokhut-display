@@ -373,7 +373,7 @@
         if (!tickerScroll) return;
 
         try {
-            const rssUrl = 'https://www.omroepgelderland.nl/nieuws/rss';
+            const rssUrl = 'https://www.gld.nl/rss/index.xml';
             const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
 
             const response = await fetch(apiUrl);
