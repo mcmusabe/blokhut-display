@@ -156,7 +156,7 @@ body {
     height: 100%;
     background: linear-gradient(90deg, var(--accent), var(--accent-light));
     width: 0%;
-    transition: width 0.1s linear;
+    /* Geen transition voor Pi Zero */
 }
 
 /* Slide Indicators */
@@ -250,7 +250,7 @@ body {
     padding-top: 84px;
 }
 
-/* Individual Slide */
+/* Individual Slide - geen animatie voor Pi Zero 2 W */
 .slide {
     position: absolute;
     top: 84px;
@@ -263,16 +263,12 @@ body {
     align-items: center;
     padding: 4rem 6rem 6rem;
     opacity: 0;
-    transform: translateX(30px);
-    transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out; /* Snellere transitie */
     pointer-events: none;
     background: transparent;
-    will-change: opacity, transform; /* GPU acceleratie hint */
 }
 
 .slide.active {
     opacity: 1;
-    transform: translateX(0);
     z-index: 10;
     pointer-events: auto;
 }
@@ -792,39 +788,26 @@ body {
     display: flex;
     align-items: center;
     position: relative;
+    padding: 0 20px;
 }
 
+/* Geen scroll-animatie: één item zichtbaar, wisselt via JS (Pi Zero vriendelijk) */
 .news-ticker-scroll {
     display: flex;
     align-items: center;
-    white-space: nowrap;
-    animation: tickerScroll 60s linear infinite; /* Vertraagd van 30s naar 60s */
-    padding-left: 100%;
-    will-change: transform; /* GPU acceleratie hint */
-}
-
-.news-ticker-scroll:hover {
-    animation-play-state: paused;
-}
-
-.news-item {
-    display: inline-flex;
-    align-items: center;
-    padding: 0 40px;
+    width: 100%;
     color: white;
     font-size: 1.3rem;
     font-weight: 500;
 }
 
-.news-item::after {
-    content: '•';
-    margin-left: 40px;
-    color: rgba(255, 255, 255, 0.5);
-    font-size: 1.5rem;
-}
-
-.news-item:last-child::after {
-    content: '';
+.news-item {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 20px;
+    color: white;
+    font-size: 1.3rem;
+    font-weight: 500;
 }
 
 .news-time {
@@ -834,15 +817,6 @@ body {
     font-size: 0.9rem;
     margin-right: 15px;
     font-weight: 600;
-}
-
-@keyframes tickerScroll {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(-100%);
-    }
 }
 
 /* Adjust slide indicators position when ticker is visible */

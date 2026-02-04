@@ -2,7 +2,7 @@
     'use strict';
 
     const SLIDE_INTERVAL = 10000;
-    const PROGRESS_UPDATE_INTERVAL = 100; // Verhoogd van 50ms naar 100ms voor betere performance
+    const PROGRESS_UPDATE_INTERVAL = 500; // Stap elke 500ms (geen vloeiende animatie voor Pi Zero)
     const CONTENT_REFRESH_INTERVAL = 5 * 60 * 1000; // Elke 5 minuten content herladen (was 30 sec, onnodig frequent)
 
     // GitHub configuratie - WIJZIG DIT NAAR JE EIGEN REPO
@@ -361,15 +361,18 @@
         });
     }
 
-    // News Ticker - Live nieuws van Omroep Gelderland
-    const NEWS_REFRESH_INTERVAL = 5 * 60 * 1000; // Refresh every 5 minutes
+    // News Ticker - geen scroll-animatie, wissel elke 6 sec (Pi Zero vriendelijk)
+    const NEWS_REFRESH_INTERVAL = 5 * 60 * 1000;
+    const NEWS_CYCLE_INTERVAL = 6000; // 6 seconden per item
+    let newsItems = [];
+    let newsIndex = 0;
+    let newsCycleTimer = null;
 
     async function loadNews() {
         const tickerScroll = document.getElementById('news-ticker-scroll');
         if (!tickerScroll) return;
 
         try {
-            // Try to fetch live news from Omroep Gelderland RSS via rss2json
             const rssUrl = 'https://www.omroepgelderland.nl/nieuws/rss';
             const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
 
@@ -379,64 +382,59 @@
             const data = await response.json();
 
             if (data.status === 'ok' && data.items && data.items.length > 0) {
-                const newsItems = data.items.slice(0, 10).map(item => {
+                newsItems = data.items.slice(0, 10).map(item => {
                     const date = new Date(item.pubDate);
                     const time = date.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
-                    return {
-                        time: time,
-                        text: item.title
-                    };
+                    return { time: time, text: item.title };
                 });
-                renderNews(newsItems);
+                renderNewsCycle();
                 console.log('Live nieuws geladen van Omroep Gelderland');
             } else {
                 throw new Error('No news items');
             }
         } catch (error) {
             console.log('Fallback naar lokaal nieuws:', error.message);
-            // Fallback: try local news.json
             try {
                 const localResponse = await fetch('assets/news.json');
                 if (localResponse.ok) {
-                    const localNews = await localResponse.json();
-                    renderNews(localNews);
+                    newsItems = await localResponse.json();
+                    renderNewsCycle();
                 } else {
                     throw new Error('Local news not found');
                 }
             } catch (localError) {
-                // Final fallback: default news
-                const defaultNews = [
+                newsItems = [
                     { time: "09:00", text: "Welkom bij Blokhutwinkel - Europa's grootste showroom in Zutphen" },
                     { time: "09:15", text: "Meer dan 100 blokhutten en tuinhuizen te bezichtigen" },
                     { time: "09:30", text: "Gratis advies en 3D tekening bij elke offerte" },
                     { time: "09:45", text: "Geen aanbetaling nodig - betaal pas bij levering" }
                 ];
-                renderNews(defaultNews);
+                renderNewsCycle();
             }
         }
 
-        // Refresh news periodically
         setTimeout(loadNews, NEWS_REFRESH_INTERVAL);
     }
 
-    function renderNews(newsItems) {
+    function renderNewsCycle() {
         const tickerScroll = document.getElementById('news-ticker-scroll');
         if (!tickerScroll || !newsItems.length) return;
 
-        // Duplicate items for seamless loop
-        const allItems = [...newsItems, ...newsItems];
+        if (newsCycleTimer) clearInterval(newsCycleTimer);
 
-        tickerScroll.innerHTML = allItems.map(item => `
-            <div class="news-item">
-                ${item.time ? `<span class="news-time">${item.time}</span>` : ''}
-                <span class="news-text">${item.text}</span>
-            </div>
-        `).join('');
+        function showItem() {
+            const item = newsItems[newsIndex];
+            tickerScroll.innerHTML = `
+                <div class="news-item">
+                    ${item.time ? `<span class="news-time">${item.time}</span>` : ''}
+                    <span class="news-text">${item.text}</span>
+                </div>
+            `;
+            newsIndex = (newsIndex + 1) % newsItems.length;
+        }
 
-        // Adjust animation speed based on content length
-        const contentWidth = tickerScroll.scrollWidth;
-        const duration = Math.max(30, contentWidth / 50);
-        tickerScroll.style.animationDuration = `${duration}s`;
+        showItem();
+        newsCycleTimer = setInterval(showItem, NEWS_CYCLE_INTERVAL);
     }
 
     if (document.readyState === 'loading') {
