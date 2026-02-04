@@ -117,12 +117,14 @@
 
             let html = '';
 
-            // Video slide (full screen video)
+            // Video slide: lazy load (src alleen bij actieve slide), preload=none voor Pi
             if (slide.type === 'video' && slide.video) {
+                const videoUrl = getAssetUrl(slide.video);
+                const posterAttr = slide.poster ? ` poster="${getAssetUrl(slide.poster)}"` : '';
                 html += `
                     <div class="video-container">
-                        <video class="slide-video" autoplay muted loop playsinline>
-                            <source src="${getAssetUrl(slide.video)}" type="video/mp4">
+                        <video class="slide-video" preload="none" muted loop playsinline data-src="${videoUrl}"${posterAttr}>
+                            <source type="video/mp4">
                         </video>
                         <div class="video-overlay">
                             <div class="slide-content">
@@ -299,7 +301,26 @@
 
         const allSlides = slideshowContainer.querySelectorAll('.slide');
         allSlides.forEach((slide, i) => {
-            slide.classList.toggle('active', i === index);
+            const isActive = i === index;
+            slide.classList.toggle('active', isActive);
+
+            const video = slide.querySelector('.slide-video');
+            if (!video) return;
+            const source = video.querySelector('source');
+            if (isActive) {
+                const src = video.dataset.src;
+                if (src && (!source.src || source.src !== src)) {
+                    source.src = src;
+                    video.load();
+                    video.play().catch(() => {});
+                } else if (source.src) {
+                    video.play().catch(() => {});
+                }
+            } else {
+                video.pause();
+                source.removeAttribute('src');
+                video.load();
+            }
         });
 
         updateIndicators();
