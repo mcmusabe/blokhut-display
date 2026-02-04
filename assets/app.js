@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    const SLIDE_INTERVAL = 10000;
+    const SLIDE_INTERVAL = 5000;
     const PROGRESS_UPDATE_INTERVAL = 500; // Stap elke 500ms (geen vloeiende animatie voor Pi Zero)
     const CONTENT_REFRESH_INTERVAL = 5 * 60 * 1000; // Elke 5 minuten content herladen (was 30 sec, onnodig frequent)
 
@@ -363,7 +363,7 @@
 
     // News Ticker - geen scroll-animatie, wissel elke 6 sec (Pi Zero vriendelijk)
     const NEWS_REFRESH_INTERVAL = 5 * 60 * 1000;
-    const NEWS_CYCLE_INTERVAL = 6000; // 6 seconden per item
+    const NEWS_CYCLE_INTERVAL = 3500; // 3,5 seconden per item
     let newsItems = [];
     let newsIndex = 0;
     let newsCycleTimer = null;
