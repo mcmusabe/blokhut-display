@@ -5,6 +5,10 @@
     const PROGRESS_UPDATE_INTERVAL = 500; // Stap elke 500ms (geen vloeiende animatie voor Pi Zero)
     const CONTENT_REFRESH_INTERVAL = 5 * 60 * 1000; // Elke 5 minuten content herladen (was 30 sec, onnodig frequent)
 
+    // Lite-modus: ?lite=1 of ?pi=1 → geen video, alleen placeholder (snel en stabiel op Pi Zero)
+    const params = new URLSearchParams(window.location.search || '');
+    const LITE_MODE = params.has('lite') || params.has('pi');
+
     // GitHub configuratie - WIJZIG DIT NAAR JE EIGEN REPO
     const GITHUB_USER = 'mcmusabe';
     const GITHUB_REPO = 'blokhut-display';
@@ -117,24 +121,39 @@
 
             let html = '';
 
-            // Video slide: lazy load (src alleen bij actieve slide), preload=none voor Pi
+            // Video slide: in lite-modus alleen placeholder (geen video = snel en pro op Pi)
             if (slide.type === 'video' && slide.video) {
-                const videoUrl = getAssetUrl(slide.video);
-                const posterAttr = slide.poster ? ` poster="${getAssetUrl(slide.poster)}"` : '';
-                html += `
-                    <div class="video-container">
-                        <video class="slide-video" preload="none" muted loop playsinline data-src="${videoUrl}"${posterAttr}>
-                            <source type="video/mp4">
-                        </video>
-                        <div class="video-overlay">
-                            <div class="slide-content">
-                                ${slide.badge ? `<span class="product-badge">${slide.badge}</span>` : ''}
-                                ${slide.title ? `<h1>${slide.title}</h1>` : ''}
-                                ${slide.subtitle ? `<p class="subtitle">${slide.subtitle}</p>` : ''}
+                if (LITE_MODE) {
+                    html += `
+                        <div class="video-container video-container--lite">
+                            <div class="video-placeholder"></div>
+                            <div class="video-overlay">
+                                <div class="slide-content">
+                                    ${slide.badge ? `<span class="product-badge">${slide.badge}</span>` : ''}
+                                    ${slide.title ? `<h1>${slide.title}</h1>` : ''}
+                                    ${slide.subtitle ? `<p class="subtitle">${slide.subtitle}</p>` : ''}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                `;
+                    `;
+                } else {
+                    const videoUrl = getAssetUrl(slide.video);
+                    const posterAttr = slide.poster ? ` poster="${getAssetUrl(slide.poster)}"` : '';
+                    html += `
+                        <div class="video-container">
+                            <video class="slide-video" preload="none" muted loop playsinline data-src="${videoUrl}"${posterAttr}>
+                                <source type="video/mp4">
+                            </video>
+                            <div class="video-overlay">
+                                <div class="slide-content">
+                                    ${slide.badge ? `<span class="product-badge">${slide.badge}</span>` : ''}
+                                    ${slide.title ? `<h1>${slide.title}</h1>` : ''}
+                                    ${slide.subtitle ? `<p class="subtitle">${slide.subtitle}</p>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
             }
             // Product slides with image (different layout)
             else if (slide.type === 'product' && slide.image) {

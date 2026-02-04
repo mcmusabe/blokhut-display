@@ -12,7 +12,7 @@
 #   - Oudere versies (LXDE/X11)
 # ===========================================
 
-DISPLAY_URL="http://192.168.178.51:8000/"
+DISPLAY_URL="http://192.168.178.51:8000/?lite=1"
 PI_USER=$(whoami)
 HOME_DIR=$(eval echo ~$PI_USER)
 
@@ -126,14 +126,14 @@ else
     echo "  -> LXDE/X11 configuratie..."
     
     mkdir -p /etc/xdg/lxsession/LXDE-pi
-    cat > /etc/xdg/lxsession/LXDE-pi/autostart << 'EOF'
+    cat > /etc/xdg/lxsession/LXDE-pi/autostart << EOF
 @lxpanel --profile LXDE-pi
 @pcmanfm --desktop --profile LXDE-pi
 @xset s off
 @xset -dpms
 @xset s noblank
 @unclutter -idle 0.5 -root
-@bash -c "sleep 10 && chromium-browser --kiosk --noerrdialogs --disable-infobars --disable-session-crashed-bubble --disable-translate --no-first-run --enable-gpu-rasterization --enable-zero-copy --disable-software-rasterizer --enable-features=VaapiVideoDecoder --autoplay-policy=no-user-gesture-required http://192.168.178.51:8000/"
+@bash -c "sleep 10 && chromium-browser --kiosk --noerrdialogs --disable-infobars --disable-session-crashed-bubble --disable-translate --no-first-run --enable-gpu-rasterization --autoplay-policy=no-user-gesture-required ${DISPLAY_URL}"
 EOF
 fi
 

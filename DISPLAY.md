@@ -14,6 +14,18 @@ Om afsnijden aan de randen te voorkomen:
 - **LG:** Instellingen > Beeld > Beeldgrootte > **Just Scan** aan
 - **Andere merken:** Zoek naar “overscan uitzetten”, “1:1” of “Pixel-voor-pixel”
 
+## Lite-modus (Pi Zero: snel en professioneel)
+
+**Gebruik op de Pi:** open de display met **`?lite=1`** of **`?pi=1`**:
+
+```
+http://192.168.178.51:8000/?lite=1
+```
+
+In lite-modus worden **geen video’s** geladen. Video-slides tonen dezelfde titel en tekst met een nette gradient-achtergrond. Geen traagheid, geen artefacten, stabiel en professioneel op de Pi Zero 2 W.
+
+**Autostart op de Pi:** pas de Chromium-URL in `/etc/xdg/lxsession/LXDE-pi/autostart` aan naar `http://192.168.178.51:8000/?lite=1`.
+
 ## Raspberry Pi Zero 2 W: video en performance
 
 De Pi Zero 2 W heeft **512 MB RAM**; Chromium is zwaar en 1080p-video is vaak te zwaar. In de app:
