@@ -19,12 +19,20 @@ Om afsnijden aan de randen te voorkomen:
 **Gebruik op de Pi:** open de display met **`?lite=1`** of **`?pi=1`**:
 
 ```
-http://192.168.178.51:8000/?lite=1
+https://display.intern.blokhutwinkel.nl/?lite=1
 ```
 
 In lite-modus worden **geen video’s** geladen. Video-slides tonen dezelfde titel en tekst met een nette gradient-achtergrond. Geen traagheid, geen artefacten, stabiel en professioneel op de Pi Zero 2 W.
 
-**Autostart op de Pi:** pas de Chromium-URL in `/etc/xdg/lxsession/LXDE-pi/autostart` aan naar `http://192.168.178.51:8000/?lite=1`.
+**Autostart op de Pi:** pas de Chromium-URL in `/etc/xdg/lxsession/LXDE-pi/autostart` aan naar `https://display.intern.blokhutwinkel.nl/?lite=1`.
+
+## Keyring-dialoog op showroom-TV (eenmalig)
+
+Als na een update of eerste start een venster **"Choose password for new keyring"** op de TV verschijnt:
+
+1. **Nu:** Laat beide velden leeg en klik **Continue**. Dan gaat het display verder.
+2. **Daarna:** Het kiosk-script ontgrendelt de keyring bij elke start; na reboot zou de dialoog niet meer moeten komen. Als je toch weer de dialoog ziet, voeg in `~/start-kiosk.sh` vóór de regel die Chromium start toe:  
+   `export $(echo "" | gnome-keyring-daemon -r --unlock 2>/dev/null) || true`
 
 ## Raspberry Pi Zero 2 W: video en performance
 

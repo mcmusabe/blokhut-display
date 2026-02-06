@@ -12,7 +12,7 @@
 #   - Oudere versies (LXDE/X11)
 # ===========================================
 
-DISPLAY_URL="http://192.168.178.51:8000/?lite=1"
+DISPLAY_URL="https://display.intern.blokhutwinkel.nl/?lite=1"
 PI_USER=$(whoami)
 HOME_DIR=$(eval echo ~$PI_USER)
 
@@ -65,6 +65,9 @@ fi
 # Sluit eventuele crash dialogen
 sed -i 's/"exited_cleanly":false/"exited_cleanly":true/' ${HOME_DIR}/.config/chromium/Default/Preferences 2>/dev/null
 sed -i 's/"exit_type":"Crashed"/"exit_type":"Normal"/' ${HOME_DIR}/.config/chromium/Default/Preferences 2>/dev/null
+
+# Unlock keyring (leeg wachtwoord) zodat geen "Choose password for new keyring" op TV
+export \$(echo "" | gnome-keyring-daemon -r --unlock 2>/dev/null) || true
 
 # Start Chromium in kiosk mode (chromium of chromium-browser)
 BROWSER=\$(which chromium || which chromium-browser)

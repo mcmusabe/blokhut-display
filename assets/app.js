@@ -23,6 +23,7 @@
     let progressTimer = null;
     let isPaused = false;
     let progressValue = 0;
+    let newsItems = [];
 
     const slideshowContainer = document.getElementById('slideshow-container');
     const errorMessage = document.getElementById('error-message');
@@ -58,7 +59,7 @@
 
             // Start auto-refresh van content
             setInterval(refreshContent, CONTENT_REFRESH_INTERVAL);
-            console.log('✅ Display gestart - Content wordt elke 30 seconden ververst');
+            console.log('✅ Display gestart - Content wordt elke 5 minuten ververst');
         } catch (error) {
             console.error('Error loading slides:', error);
             showError();
@@ -403,10 +404,18 @@
 
     // News Ticker - scroll-animatie met dubbele content voor naadloze loop (GPU: translate3d)
     const NEWS_REFRESH_INTERVAL = 5 * 60 * 1000;
+    const DEFAULT_NEWS_ITEMS = [
+        { time: "09:00", text: "Welkom bij Blokhutwinkel - Europa's grootste showroom in Zutphen" },
+        { time: "09:15", text: "Meer dan 100 blokhutten en tuinhuizen te bezichtigen" },
+        { time: "09:30", text: "Gratis advies en 3D tekening bij elke offerte" },
+        { time: "09:45", text: "Geen aanbetaling nodig - betaal pas bij levering" }
+    ];
 
     async function loadNews() {
         const tickerScroll = document.getElementById('news-ticker-scroll');
         if (!tickerScroll) return;
+
+        renderNewsTicker(DEFAULT_NEWS_ITEMS);
 
         try {
             const rssUrl = 'https://www.gld.nl/rss/index.xml';
@@ -433,19 +442,13 @@
             try {
                 const localResponse = await fetch('assets/news.json');
                 if (localResponse.ok) {
-                    newsItems = await localResponse.json();
-                    renderNewsTicker(newsItems);
+                    const localItems = await localResponse.json();
+                    renderNewsTicker(localItems);
                 } else {
                     throw new Error('Local news not found');
                 }
             } catch (localError) {
-                newsItems = [
-                    { time: "09:00", text: "Welkom bij Blokhutwinkel - Europa's grootste showroom in Zutphen" },
-                    { time: "09:15", text: "Meer dan 100 blokhutten en tuinhuizen te bezichtigen" },
-                    { time: "09:30", text: "Gratis advies en 3D tekening bij elke offerte" },
-                    { time: "09:45", text: "Geen aanbetaling nodig - betaal pas bij levering" }
-                ];
-                renderNewsTicker(newsItems);
+                renderNewsTicker(DEFAULT_NEWS_ITEMS);
             }
         }
 

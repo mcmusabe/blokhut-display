@@ -823,13 +823,6 @@ body {
 .news-ticker-scroll:hover {
     animation-play-state: paused;
 }
-
-@media (prefers-reduced-motion: reduce) {
-    .news-ticker-scroll {
-        animation: none;
-    }
-}
-
 @keyframes tickerScroll {
     0%   { transform: translate3d(0, 0, 0); }
     100% { transform: translate3d(-100%, 0, 0); }

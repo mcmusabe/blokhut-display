@@ -102,17 +102,17 @@
         "title": "Onze Voordelen",
         "features": [
             {
-                "icon": "🚚",
+                "icon": "●",
                 "title": "Gratis Levering",
                 "description": "In NL & België"
             },
             {
-                "icon": "💳",
+                "icon": "●",
                 "title": "Geen Aanbetaling",
                 "description": "Betaal bij levering"
             },
             {
-                "icon": "🛠️",
+                "icon": "●",
                 "title": "Montage Service",
                 "description": "Professionele plaatsing"
             },
