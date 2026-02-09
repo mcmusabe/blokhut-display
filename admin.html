@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Blokhut Display</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <div class="admin-container">
+        <header class="admin-header">
+            <div class="header-content">
+                <div class="header-logo-title">
+                    <img src="assets/images/logoblokhutwinkel.png" alt="Blokhut Winkel Logo" class="header-logo">
+                    <div>
+                        <h1>Blokhut Display Admin</h1>
+                        <p class="header-subtitle">Content Beheer Systeem</p>
+                    </div>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button id="save-all" class="btn btn-primary shimmer-btn">
+                    <span>Alles Opslaan</span>
+                </button>
+                <button id="logout-btn" class="btn btn-secondary">
+                    <span>Uitloggen</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="admin-content">
+            <nav class="admin-nav">
+                <button class="nav-btn active" data-tab="slides">
+                    <span>Slides</span>
+                </button>
+                <button class="nav-btn" data-tab="config">
+                    <span>Instellingen</span>
+                </button>
+            </nav>
+
+            <!-- Slides Tab -->
+            <div id="slides-tab" class="tab-content active">
+                <div class="section-header">
+                    <div>
+                        <h2>Slides Beheren</h2>
+                        <div class="stats-bar">
+                            <span id="slides-count" class="stat-badge">0 slides</span>
+                        </div>
+                    </div>
+                    <div class="header-actions-group">
+                        <div class="search-box">
+                            <input type="text" id="search-slides" placeholder="Zoek slides..." autocomplete="off">
+                            <span class="search-icon">🔍</span>
+                        </div>
+                        <button id="add-slide" class="btn btn-secondary shimmer-btn">
+                            <span>+ Nieuwe Slide</span>
+                        </button>
+                    </div>
+                </div>
+                <div id="loading-indicator" class="loading-spinner hidden">
+                    <div class="spinner"></div>
+                    <p>Laden...</p>
+                </div>
+                <div id="empty-state" class="empty-state hidden">
+                    <div class="empty-icon">📄</div>
+                    <h3>Geen slides gevonden</h3>
+                    <p>Voeg je eerste slide toe om te beginnen</p>
+                    <button class="btn btn-primary" onclick="document.getElementById('add-slide').click()">
+                        Nieuwe Slide Toevoegen
+                    </button>
+                </div>
+                <div id="slides-list" class="items-list"></div>
+            </div>
+
+            <!-- Instellingen Tab (RSS / links) -->
+            <div id="config-tab" class="tab-content">
+                <h2>Instellingen</h2>
+                <p class="section-desc">Nieuws wordt automatisch opgehaald via de RSS-feed. Pas hier alleen de URL of het ververs-interval aan.</p>
+                <div class="config-form-wrap magic-card">
+                    <form id="config-form">
+                        <div class="form-group">
+                            <label for="config-rss-url">RSS-feed URL (nieuwsticker)</label>
+                            <input type="url" id="config-rss-url" placeholder="https://www.gld.nl/rss/index.xml" required>
+                            <small>Bijv. Omroep Gelderland: https://www.gld.nl/rss/index.xml</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="config-refresh-minutes">Ververs interval (minuten)</label>
+                            <input type="number" id="config-refresh-minutes" min="1" max="60" placeholder="5">
+                            <small>Hoe vaak nieuws wordt opgehaald (standaard 5 min)</small>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary shimmer-btn">
+                                <span>Instellingen opslaan</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide Modal -->
+    <div id="slide-modal" class="modal">
+        <div class="modal-content magic-card">
+            <div class="modal-header">
+                <h3>Slide Bewerken</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="slide-form">
+                    <input type="hidden" id="slide-index">
+                    
+                    <div class="form-group">
+                        <label for="slide-type">Type</label>
+                        <select id="slide-type" required>
+                            <option value="welcome">Welcome</option>
+                            <option value="video">Video</option>
+                            <option value="product">Product</option>
+                            <option value="online">Online</option>
+                            <option value="services">Services</option>
+                            <option value="contact">Contact</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="slide-id-field">ID</label>
+                        <input type="text" id="slide-id-field" required placeholder="bijv. product-blokhut-1">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="slide-title">Titel</label>
+                        <input type="text" id="slide-title" placeholder="Titel van de slide">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="slide-subtitle">Subtitel</label>
+                        <input type="text" id="slide-subtitle" placeholder="Subtitel of beschrijving">
+                    </div>
+
+                    <!-- Welcome specific fields -->
+                    <div class="form-group" id="divider-group">
+                        <label>
+                            <input type="checkbox" id="slide-divider"> Divider tonen
+                        </label>
+                    </div>
+
+                    <!-- Badge field (voor video, product, online) -->
+                    <div class="form-group" id="badge-group">
+                        <label for="slide-badge">Badge</label>
+                        <input type="text" id="slide-badge" placeholder="bijv. Populair, Nieuw, Video">
+                    </div>
+
+                    <!-- Image field (voor product) -->
+                    <div class="form-group" id="image-group">
+                        <label for="slide-image">Afbeelding</label>
+                        <input type="text" id="slide-image" placeholder="assets/images/afbeelding.png">
+                        <div id="image-preview" class="image-preview hidden">
+                            <img id="image-preview-img" src="" alt="Preview">
+                            <button type="button" class="preview-remove" onclick="clearImagePreview()">&times;</button>
+                        </div>
+                        <div class="upload-group">
+                            <input type="file" id="slide-image-upload" accept="image/*">
+                            <button type="button" class="btn btn-small btn-upload">Upload</button>
+                        </div>
+                    </div>
+
+                    <!-- Video field -->
+                    <div class="form-group" id="video-group">
+                        <label for="slide-video">Video</label>
+                        <input type="text" id="slide-video" placeholder="assets/videos/video.mp4">
+                        <div class="upload-group">
+                            <input type="file" id="slide-video-upload" accept="video/*">
+                            <button type="button" class="btn btn-small btn-upload">Upload</button>
+                        </div>
+                    </div>
+
+                    <!-- Price fields (voor product) -->
+                    <div class="form-group" id="price-group">
+                        <label for="slide-price">Prijs</label>
+                        <input type="text" id="slide-price" placeholder="bijv. Vanaf €2.495,-">
+                    </div>
+
+                    <div class="form-group" id="price-note-group">
+                        <label for="slide-price-note">Prijs Notitie</label>
+                        <input type="text" id="slide-price-note" placeholder="bijv. Gratis levering in NL & BE">
+                    </div>
+
+                    <!-- URL field (voor online) -->
+                    <div class="form-group" id="url-group">
+                        <label for="slide-url">URL</label>
+                        <input type="text" id="slide-url" placeholder="www.blokhutwinkel.nl">
+                    </div>
+
+                    <!-- QR field (voor online) -->
+                    <div class="form-group" id="qr-group">
+                        <label>
+                            <input type="checkbox" id="slide-qr"> QR Code tonen
+                        </label>
+                    </div>
+
+                    <!-- CTA field (voor online) -->
+                    <div class="form-group" id="cta-group">
+                        <label for="slide-cta">Call to Action</label>
+                        <input type="text" id="slide-cta" placeholder="bijv. Scan voor onze complete collectie">
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary shimmer-btn">
+                            <span>Opslaan</span>
+                        </button>
+                        <button type="button" class="btn btn-secondary modal-close">Annuleren</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success/Error Messages -->
+    <div id="message" class="message"></div>
+
+    <!-- Confirm Dialog -->
+    <div id="confirm-dialog" class="modal">
+        <div class="modal-content magic-card confirm-dialog">
+            <div class="modal-header">
+                <h3 id="confirm-title">Bevestigen</h3>
+            </div>
+            <div class="modal-body">
+                <p id="confirm-message">Weet je zeker dat je deze actie wilt uitvoeren?</p>
+                <div class="form-actions">
+                    <button id="confirm-yes" class="btn btn-danger">Ja, verwijderen</button>
+                    <button id="confirm-no" class="btn btn-secondary">Annuleren</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

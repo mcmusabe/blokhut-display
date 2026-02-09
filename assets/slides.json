@@ -102,22 +102,22 @@
         "title": "Onze Voordelen",
         "features": [
             {
-                "icon": "●",
+                "icon": "truck",
                 "title": "Gratis Levering",
                 "description": "In NL & België"
             },
             {
-                "icon": "●",
+                "icon": "card",
                 "title": "Geen Aanbetaling",
                 "description": "Betaal bij levering"
             },
             {
-                "icon": "●",
+                "icon": "wrench",
                 "title": "Montage Service",
                 "description": "Professionele plaatsing"
             },
             {
-                "icon": "✓",
+                "icon": "check",
                 "title": "25+ Jaar Ervaring",
                 "description": "Specialist in maatwerk"
             }

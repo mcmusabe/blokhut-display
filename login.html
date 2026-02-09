@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inloggen - Blokhut Display Admin</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body class="login-page">
+    <div class="login-container">
+        <div class="login-card magic-card">
+            <div class="login-header">
+                <div class="login-logo">
+                    <img src="assets/images/logoblokhutwinkel.png" alt="Blokhut Winkel Logo" class="logo-image">
+                </div>
+                <h1>Blokhut Display Admin</h1>
+                <p class="login-subtitle">Content Beheer Systeem</p>
+            </div>
+            <form id="login-form" class="login-form">
+                <div class="form-group">
+                    <label for="password">Wachtwoord</label>
+                    <input type="password" id="password" name="password" required autofocus autocomplete="current-password">
+                </div>
+                <div id="login-error" class="login-error hidden"></div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary shimmer-btn">
+                        <span>Inloggen</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3000/api';
+        const loginForm = document.getElementById('login-form');
+        const passwordInput = document.getElementById('password');
+        const errorDiv = document.getElementById('login-error');
+
+        function showError(message) {
+            errorDiv.textContent = message;
+            errorDiv.classList.remove('hidden');
+        }
+
+        function hideError() {
+            errorDiv.classList.add('hidden');
+        }
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideError();
+
+            const password = passwordInput.value.trim();
+            if (!password) {
+                showError('Vul een wachtwoord in');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    window.location.href = 'admin.html';
+                } else {
+                    showError(data.error || 'Onjuist wachtwoord');
+                    passwordInput.value = '';
+                    passwordInput.focus();
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showError('Fout bij verbinden met server');
+            }
+        });
+
+        // Check if already logged in
+        (async () => {
+            try {
+                const response = await fetch(`${API_BASE}/auth/me`, {
+                    credentials: 'include'
+                });
+                if (response.ok) {
+                    window.location.href = 'admin.html';
+                }
+            } catch (error) {
+                // Ignore - user needs to login
+            }
+        })();
+    </script>
+</body>
+</html>

@@ -38,6 +38,16 @@
         return localPath;
     }
 
+    function getFeatureIcon(icon) {
+        const icons = {
+            truck: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>',
+            card: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>',
+            wrench: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>',
+            check: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
+        };
+        return icons[icon] ? icons[icon] : (icon || '');
+    }
+
     async function loadSlides() {
         const url = USE_GITHUB
             ? `${GITHUB_BASE_URL}/assets/slides.json?t=${Date.now()}`
@@ -244,7 +254,7 @@
                     slide.features.forEach(feature => {
                         html += `
                             <div class="feature-card">
-                                <div class="feature-icon">${feature.icon || ''}</div>
+                                <div class="feature-icon">${getFeatureIcon(feature.icon)}</div>
                                 <h3>${feature.title}</h3>
                                 <p>${feature.description || ''}</p>
                             </div>
@@ -403,7 +413,7 @@
     }
 
     // News Ticker - scroll-animatie met dubbele content voor naadloze loop (GPU: translate3d)
-    const NEWS_REFRESH_INTERVAL = 5 * 60 * 1000;
+    const DEFAULT_NEWS_REFRESH_MINUTES = 5;
     const DEFAULT_NEWS_ITEMS = [
         { time: "09:00", text: "Welkom bij Blokhutwinkel - Europa's grootste showroom in Zutphen" },
         { time: "09:15", text: "Meer dan 100 blokhutten en tuinhuizen te bezichtigen" },
@@ -417,8 +427,22 @@
 
         renderNewsTicker(DEFAULT_NEWS_ITEMS);
 
+        let rssUrl = 'https://www.gld.nl/rss/index.xml';
+        let refreshMinutes = DEFAULT_NEWS_REFRESH_MINUTES;
         try {
-            const rssUrl = 'https://www.gld.nl/rss/index.xml';
+            const configRes = await fetch('assets/config.json?t=' + Date.now());
+            if (configRes.ok) {
+                const config = await configRes.json();
+                if (config.rssUrl && typeof config.rssUrl === 'string') {
+                    rssUrl = config.rssUrl.trim();
+                }
+                if (config.newsRefreshMinutes != null && config.newsRefreshMinutes >= 1) {
+                    refreshMinutes = Math.min(60, config.newsRefreshMinutes);
+                }
+            }
+        } catch (e) { /* gebruik defaults */ }
+
+        try {
             const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
 
             const response = await fetch(apiUrl);
@@ -433,7 +457,7 @@
                     return { time: time, text: item.title };
                 });
                 renderNewsTicker(newsItems);
-                console.log('Live nieuws geladen van Omroep Gelderland');
+                console.log('Live nieuws geladen van RSS');
             } else {
                 throw new Error('No news items');
             }
@@ -452,7 +476,7 @@
             }
         }
 
-        setTimeout(loadNews, NEWS_REFRESH_INTERVAL);
+        setTimeout(loadNews, refreshMinutes * 60 * 1000);
     }
 
     function renderNewsTicker(items) {

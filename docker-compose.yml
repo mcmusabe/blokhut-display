@@ -11,3 +11,19 @@ services:
       - ./assets:/usr/share/nginx/html/assets:ro
       - ./index.html:/usr/share/nginx/html/index.html:ro
     restart: unless-stopped
+
+  blokhut-admin:
+    build:
+      context: .
+      dockerfile: Dockerfile.admin
+    container_name: blokhut-admin
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./assets:/app/assets
+      - ./admin.html:/app/admin.html
+      - ./admin.css:/app/admin.css
+      - ./admin.js:/app/admin.js
+    restart: unless-stopped
+    depends_on:
+      - blokhut-display
