@@ -24,6 +24,7 @@ services:
       - ./admin.html:/app/admin.html
       - ./admin.css:/app/admin.css
       - ./admin.js:/app/admin.js
+      - ./login.html:/app/login.html
     restart: unless-stopped
     depends_on:
       - blokhut-display
