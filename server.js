@@ -9,6 +9,9 @@ const bcrypt = require('bcryptjs');
 const app = express();
 const PORT = 3000;
 
+// Achter reverse proxy (HTTPS → Node op bv. admin.display.intern.blokhutwinkel.nl)
+app.set('trust proxy', 1);
+
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(session({
@@ -18,6 +21,7 @@ app.use(session({
   cookie: {
     httpOnly: true,
     sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production', // HTTPS op productie (admin.display.intern...)
     maxAge: 24 * 60 * 60 * 1000 // 24 hours
   }
 }));
